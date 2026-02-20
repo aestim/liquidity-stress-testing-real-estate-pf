@@ -60,6 +60,7 @@ I developed a **Python-based Monte Carlo simulation engine** to evaluate liquidi
 | Refinancing LTV | 70% | 80% | 85% | Month 24 |
 
 ### 3.2 Simulation Logic
+
 ```python
 # Each iteration simulates 36 months of:
 # 1. Phase-dependent revenue generation
@@ -139,6 +140,7 @@ The simulation tracks **cumulative survival probability** month-by-month:
 ## 6. Project Organization (CCDS Structure)
 
 This project follows the **Cookiecutter Data Science** standard for modularity and reproducibility.
+
 ```text
 ├── README.md          <- Project overview (this file)
 ├── data
@@ -163,24 +165,29 @@ This project follows the **Cookiecutter Data Science** standard for modularity a
 ### 7.1 Core Modules
 
 **`PFConfig` (Data Class)**
+
 * Encapsulates all financial parameters and probability distributions
 * Supports scenario testing by modifying initialization parameters
 
 **`PFInvestmentModel` (Simulation Engine)**
+
 * Generates single stochastic path (36 months)
 * Returns status: `exit`, `default`, `refi_fail`, or `survived_no_exit`
 
 **`run_simulation()` Function**
+
 * Executes 30,000 Monte Carlo iterations
 * Returns pandas DataFrame with results + configuration object
 
 **`plot_enhanced_results()` Function**
+
 * Generates 3-panel analytical dashboard:
   1. Outcome distribution (bar chart)
   2. IRR distribution histogram (exit cases only)
   3. Survival rate curve (monthly tracking)
 
 ### 7.2 Running the Analysis
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -218,16 +225,16 @@ This framework transforms qualitative "what-if" discussions into **quantified pr
 
 ## 10. Future Enhancements
 
-- [ ] Add correlation structures between interest rates and revenue (e.g., rising rates → lower demand)
-- [ ] Implement waterfall cash flow logic for mezzanine/equity tranches
-- [ ] Develop interactive dashboard (Plotly/Streamlit) for live scenario testing
-- [ ] Integrate macroeconomic scenarios (recession, rate shock, market correction)
-- [ ] Add Value at Risk (VaR) and Conditional VaR (CVaR) analytics
+* [ ] Add correlation structures between interest rates and revenue (e.g., rising rates → lower demand)
+* [ ] Implement waterfall cash flow logic for mezzanine/equity tranches
+* [ ] Develop interactive dashboard (Plotly/Streamlit) for live scenario testing
+* [ ] Integrate macroeconomic scenarios (recession, rate shock, market correction)
+* [ ] Add Value at Risk (VaR) and Conditional VaR (CVaR) analytics
 
 ---
 
-**Repository:** [GitHub - PF Liquidity Risk Analysis](https://github.com/yourusername/pf-liquidity-risk)  
-**Author:** [Your Name]  
+**Repository:** [GitHub - PF Liquidity Risk Analysis](https://github.com/yourusername/pf-liquidity-risk)
+**Author:** Minsung Kim
 **License:** MIT
 
 ---
