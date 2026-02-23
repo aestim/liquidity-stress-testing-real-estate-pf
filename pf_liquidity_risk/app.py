@@ -45,9 +45,9 @@ TRANSLATIONS = {
         'mode': 'Mode',
         'max': 'Max',
         'interest_rates': '📊 Interest Rates',
-        'pre_completion': 'Pre-Completion Rates',
-        'stabilization': 'Stabilization Rates',
-        'post_opening_rates': 'Post-Opening Rates',
+        'rate_info': '💡 Pre-refinancing rate applies until court opening. Post-refinancing rate applies after successful refinancing at court opening.',
+        'pre_refi_rates': 'Pre-Refinancing Rate (Month 0 - Court Opening)',
+        'post_refi_rates': 'Post-Refinancing Rate (After Court Opening)',
         'min_rate': 'Min Rate',
         'mode_rate': 'Mode Rate',
         'max_rate': 'Max Rate',
@@ -155,10 +155,12 @@ TRANSLATIONS = {
         'min': '최소',
         'mode': '최빈',
         'max': '최대',
-        'interest_rates': '📊 금리',
-        'pre_completion': '준공 전 금리',
-        'stabilization': '안정화 금리',
-        'post_opening_rates': '개원 후 금리',
+        'interest_rates': '금리',
+        'rate_info': '💡 리파이낸싱 전 금리는 법원 개원 전까지 적용됩니다. 리파이낸싱 성공 시 법원 개원 후 금리로 전환됩니다.',
+        'pre_refi_rates': """리파이낸싱 전 금리
+        (0개월 - 법원 개원)""",
+        'post_refi_rates': """리파이낸싱 후 금리
+        (법원 개원 후)""",
         'min_rate': '최소 금리',
         'mode_rate': '최빈 금리',
         'max_rate': '최대 금리',
@@ -619,25 +621,51 @@ def main():
         st.markdown("---")
         
         # Interest Rate Parameters
-        st.subheader(t('interest_rates', lang))
+        st.subheader("📊 " + t('interest_rates', lang))
         
-        with st.expander(t('pre_completion', lang)):
-            pre_min = st.slider(t('min_rate', lang), 0.05, 0.20, 0.10, 0.01, key="pre_min", format="%.2f")
-            pre_mode = st.slider(t('mode_rate', lang), 0.08, 0.25, 0.14, 0.01, key="pre_mode", format="%.2f")
-            pre_max = st.slider(t('max_rate', lang), 0.10, 0.30, 0.18, 0.01, key="pre_max", format="%.2f")
-            pre_completion_rate = (pre_min, pre_mode, pre_max)
+        st.info(t('rate_info', lang))
         
-        with st.expander(t('stabilization', lang)):
-            stab_rate_min = st.slider(t('min_rate', lang), 0.04, 0.15, 0.08, 0.01, key="stab_rate_min", format="%.2f")
-            stab_rate_mode = st.slider(t('mode_rate', lang), 0.06, 0.18, 0.11, 0.01, key="stab_rate_mode", format="%.2f")
-            stab_rate_max = st.slider(t('max_rate', lang), 0.08, 0.20, 0.14, 0.01, key="stab_rate_max", format="%.2f")
-            stabilization_rate = (stab_rate_min, stab_rate_mode, stab_rate_max)
+        with st.expander(t('pre_refi_rates', lang)):
+            pre_refi_min = st.slider(
+                t('min_rate', lang), 
+                0.05, 0.20, 0.10, 0.01, 
+                key="pre_refi_min", 
+                format="%.2f"
+            )
+            pre_refi_mode = st.slider(
+                t('mode_rate', lang), 
+                0.08, 0.25, 0.14, 0.01, 
+                key="pre_refi_mode", 
+                format="%.2f"
+            )
+            pre_refi_max = st.slider(
+                t('max_rate', lang), 
+                0.10, 0.30, 0.18, 0.01, 
+                key="pre_refi_max", 
+                format="%.2f"
+            )
+            pre_refi_rate = (pre_refi_min, pre_refi_mode, pre_refi_max)
         
-        with st.expander(t('post_opening_rates', lang)):
-            post_rate_min = st.slider(t('min_rate', lang), 0.03, 0.10, 0.05, 0.01, key="post_rate_min", format="%.2f")
-            post_rate_mode = st.slider(t('mode_rate', lang), 0.04, 0.12, 0.07, 0.01, key="post_rate_mode", format="%.2f")
-            post_rate_max = st.slider(t('max_rate', lang), 0.06, 0.15, 0.09, 0.01, key="post_rate_max", format="%.2f")
-            post_court_rate = (post_rate_min, post_rate_mode, post_rate_max)
+        with st.expander(t('post_refi_rates', lang)):
+            post_refi_min = st.slider(
+                t('min_rate', lang), 
+                0.03, 0.10, 0.05, 0.01, 
+                key="post_refi_min", 
+                format="%.2f"
+            )
+            post_refi_mode = st.slider(
+                t('mode_rate', lang), 
+                0.04, 0.12, 0.07, 0.01, 
+                key="post_refi_mode", 
+                format="%.2f"
+            )
+            post_refi_max = st.slider(
+                t('max_rate', lang), 
+                0.06, 0.15, 0.09, 0.01, 
+                key="post_refi_max", 
+                format="%.2f"
+            )
+            post_refi_rate = (post_refi_min, post_refi_mode, post_refi_max)
         
         st.markdown("---")
 
@@ -693,9 +721,8 @@ def main():
             "monthly_fixed_cost": monthly_fixed_cost,
             "stabilization_revenue_dist": stabilization_revenue_dist,
             "post_court_revenue_dist": post_court_revenue_dist,
-            "pre_completion_rate": pre_completion_rate,
-            "stabilization_rate": stabilization_rate,
-            "post_court_rate": post_court_rate,
+            "pre_refi_rate": pre_refi_rate,
+            "post_refi_rate": post_refi_rate,
             "config_type": "Interactive Dashboard",
             "display_currency": currency_display,
             "completion_target_month": completion_target_month,
