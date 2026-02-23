@@ -37,9 +37,6 @@ class PFInvestmentModel:
         # Sample rates
         pre_refi_rate = np.random.triangular(*self.cfg.pre_refi_rate)
         post_refi_rate = np.random.triangular(*self.cfg.post_refi_rate)
-        
-        # Penalty rate if refinancing fails but project continues
-        penalty_rate = pre_refi_rate * 1.2  # 20% higher than original
 
         sampled_stab_rev = np.random.triangular(*self.cfg.stabilization_revenue_dist)
         sampled_post_rev = np.random.triangular(*self.cfg.post_court_revenue_dist)
