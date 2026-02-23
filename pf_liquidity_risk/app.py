@@ -551,9 +551,9 @@ def main():
             )
             monthly_fixed_cost = st.slider(
                 f"{t('monthly_fixed_cost', lang)} ({t('pct_of_equity', lang)})",
-                min_value=0.5,
-                max_value=5.0,
-                value=1.79,
+                min_value=0.1,
+                max_value=3.0,
+                value=0.2,
                 step=0.1
             )
             currency_display = t('index', lang)
@@ -574,7 +574,7 @@ def main():
             ) * 1e9
             monthly_fixed_cost = st.slider(
                 f"{t('monthly_fixed_cost', lang)} (KRW {t('millions', lang)})",
-                min_value=50,
+                min_value=10,
                 max_value=200,
                 value=100,
                 step=10
