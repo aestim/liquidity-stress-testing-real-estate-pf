@@ -55,13 +55,16 @@ TRANSLATIONS = {
         'running': 'Running {:,} simulations...',
         'completed': '✅ Simulation completed in {:.2f} seconds',
         'key_metrics': '📊 Key Risk Metrics',
+        'set_base': 'Set as Base Case',
+        'set_base_help': 'Save current results as baseline for comparison',
+        'base_set': '✅ Base case saved! Future simulations will compare against this.',
+        'reset_base': '🔄 Reset Base',
         'exit_success': 'Exit Success Rate',
         'default_rate': 'Default Rate',
         'refi_failure': 'Refi Failure Rate',
         'median_irr': 'Median IRR (Exits)',
         'var_95': '95% VaR',
         'of_equity': 'of Equity',
-        'vs_base': 'vs base',
         'outcome_dist': 'Project Outcome Distribution',
         'irr_dist': 'Equity IRR Distribution (Exit Cases)',
         'survival_curve': 'Project Survival Rate Over Time',
@@ -168,13 +171,16 @@ TRANSLATIONS = {
         'running': '{:,}회 시뮬레이션 실행 중...',
         'completed': '✅ 시뮬레이션 완료 ({:.2f}초)',
         'key_metrics': '📊 핵심 리스크 지표',
+        'set_base': '기준 케이스로 설정',
+        'set_base_help': '현재 결과를 비교 기준선으로 저장',
+        'base_set': '✅ 기준 케이스 저장 완료! 이후 시뮬레이션은 이 결과와 비교됩니다.',
+        'reset_base': '🔄 기준 초기화',
         'exit_success': 'Exit 성공률',
         'default_rate': '부도율',
         'refi_failure': '리파이낸싱 실패율',
         'median_irr': '중앙값 IRR (Exit)',
         'var_95': '95% VaR',
         'of_equity': '자기자본 대비',
-        'vs_base': '기준 대비',
         'outcome_dist': '프로젝트 결과 분포',
         'irr_dist': '자기자본 IRR 분포 (Exit 케이스)',
         'survival_curve': '프로젝트 생존율 추이',
@@ -489,15 +495,23 @@ def create_exit_multiple_chart(df: pd.DataFrame, lang: str) -> go.Figure:
 # ==========================================
 
 def main():
+        # Initialize session state
+    if 'has_run' not in st.session_state:
+        st.session_state['has_run'] = False
+    if 'df' not in st.session_state:
+        st.session_state['df'] = None
+    if 'run_sim' not in st.session_state:
+        st.session_state['run_sim'] = False
+
     # Language Toggle at the top
     col_lang1, col_lang2, col_lang3 = st.columns([6, 1, 1])
     with col_lang2:
-        if st.button("🇺🇸 EN", width="stretch", 
+        if st.button("🇺🇸 EN", width='stretch', 
                     type="primary" if st.session_state.get('lang', 'en') == 'en' else "secondary"):
             st.session_state['lang'] = 'en'
             st.rerun()
     with col_lang3:
-        if st.button("🇰🇷 KO", width="stretch",
+        if st.button("🇰🇷 KO", width='stretch',
                     type="primary" if st.session_state.get('lang', 'en') == 'ko' else "secondary"):
             st.session_state['lang'] = 'ko'
             st.rerun()
@@ -537,7 +551,7 @@ def main():
         if use_normalized:
             initial_equity = st.number_input(
                 f"{t('initial_equity', lang)} ({t('index', lang)})",
-                min_value=50.0,
+                min_value=100.0,
                 max_value=200.0,
                 value=100.0,
                 step=10.0
@@ -546,28 +560,28 @@ def main():
                 f"{t('senior_loan', lang)} ({t('index', lang)})",
                 min_value=200.0,
                 max_value=500.0,
-                value=339.3,
+                value=340.0,
                 step=10.0
             )
             monthly_fixed_cost = st.slider(
                 f"{t('monthly_fixed_cost', lang)} ({t('pct_of_equity', lang)})",
-                min_value=0.1,
-                max_value=2.0,
-                value=0.2,
+                min_value=0.2,
+                max_value=3.0,
+                value=0.4,
                 step=0.1
             )
             currency_display = t('index', lang)
         else:
             initial_equity = st.number_input(
                 f"{t('initial_equity', lang)} (KRW {t('billions', lang)})",
-                min_value=1.0,
-                max_value=20.0,
+                min_value=3.0,
+                max_value=10.0,
                 value=5.6,
                 step=0.1
             ) * 1e9
             senior_loan = st.slider(
                 f"{t('senior_loan', lang)} (KRW {t('billions', lang)})",
-                min_value=5.0,
+                min_value=10.0,
                 max_value=30.0,
                 value=19.0,
                 step=0.5
@@ -575,8 +589,8 @@ def main():
             monthly_fixed_cost = st.slider(
                 f"{t('monthly_fixed_cost', lang)} (KRW {t('millions', lang)})",
                 min_value=10,
-                max_value=200,
-                value=100,
+                max_value=100,
+                value=20,
                 step=10
             ) * 1e6
             currency_display = "KRW"
@@ -600,9 +614,9 @@ def main():
                 stab_mode = st.slider(f"{t('mode', lang)} ({t('index', lang)})", 1.0, 5.0, 2.14, 0.1, key="stab_mode")
                 stab_max = st.slider(f"{t('max', lang)} ({t('index', lang)})", 2.0, 8.0, 2.68, 0.1, key="stab_max")
             else:
-                stab_min = st.slider(f"{t('min', lang)} (KRW {t('millions', lang)})", 30, 200, 50, 10, key="stab_min") * 1e6
-                stab_mode = st.slider(f"{t('mode', lang)} (KRW {t('millions', lang)})", 50, 200, 120, 10, key="stab_mode") * 1e6
-                stab_max = st.slider(f"{t('max', lang)} (KRW {t('millions', lang)})", 100, 300, 150, 10, key="stab_max") * 1e6
+                stab_min = st.slider(f"{t('min', lang)} (KRW M)", 30, 200, 50, 10, key="stab_min") * 1e6
+                stab_mode = st.slider(f"{t('mode', lang)} (KRW M)", 50, 200, 120, 10, key="stab_mode") * 1e6
+                stab_max = st.slider(f"{t('max', lang)} (KRW M)", 100, 300, 150, 10, key="stab_max") * 1e6
             
             stabilization_revenue_dist = (stab_min, stab_mode, stab_max)
         
@@ -686,7 +700,7 @@ def main():
                 t('court_opening', lang),
                 min_value=completion_target_month + 2,
                 max_value=48,
-                value=24,
+                value=max(24, completion_target_month + 2),
                 step=1,
                 help=t('court_opening_help', lang)
             )
@@ -695,7 +709,7 @@ def main():
                 t('exit_month', lang),
                 min_value=court_opening_month + 2,
                 max_value=60,
-                value=36,
+                value=max(36, court_opening_month + 2),
                 step=1,
                 help=t('exit_help', lang)
             )
@@ -709,12 +723,13 @@ def main():
             - **{t('total_duration', lang)}**: {exit_month}{t('months_unit', lang)}
             """)
         
-        # Run Simulation Button
-        run_button = st.button(t('run_simulation', lang), type="primary", width="stretch")
+        st.markdown("---")
+        
+        run_pressed = st.button(t('run_simulation', lang), type="primary", use_container_width=True)
     
     # Main Content Area
-    if run_button:
-        # Build config dictionary
+    # 1. Execute Simulation Data
+    if run_pressed:
         config_dict = {
             "initial_equity": initial_equity,
             "senior_loan": senior_loan,
@@ -723,8 +738,6 @@ def main():
             "post_court_revenue_dist": post_court_revenue_dist,
             "pre_refi_rate": pre_refi_rate,
             "post_refi_rate": post_refi_rate,
-            "config_type": "Interactive Dashboard",
-            "display_currency": currency_display,
             "completion_target_month": completion_target_month,
             "court_opening_month": court_opening_month,
             "exit_month": exit_month,
@@ -732,24 +745,33 @@ def main():
             "display_currency": currency_display
         }
         
-        # Run simulation with progress bar
         with st.spinner(t('running', lang).format(iterations)):
             progress_bar = st.progress(0)
             start_time = time.time()
             
+            # Run and save to session state
             df = run_simulation_cached(config_dict, iterations, seed)
+            st.session_state['df'] = df
+            st.session_state['has_run'] = True
             
             progress_bar.progress(100)
             elapsed_time = time.time() - start_time
             st.success(t('completed', lang).format(elapsed_time))
+            
+    # 2. Display Results (keeps UI alive across button clicks)
+    if st.session_state.get('has_run', False) and st.session_state.get('df') is not None:
+        df = st.session_state['df']
         
         st.markdown("---")
         
         # Key Metrics Row
         st.subheader(t('key_metrics', lang))
-        col1, col2, col3, col4, col5 = st.columns(5)
         
-        # Calculate metrics
+        # Initialize base case in session state
+        if 'base_case' not in st.session_state:
+            st.session_state['base_case'] = None
+        
+        # Calculate current metrics
         exit_prob = len(df[df["status"] == "exit"]) / len(df) * 100
         default_prob = len(df[df["status"] == "default"]) / len(df) * 100
         refi_fail_prob = len(df[df["status"] == "refi_fail"]) / len(df) * 100
@@ -760,16 +782,67 @@ def main():
         loss = initial_equity - df["final_equity"]
         var_95 = np.percentile(loss, 95) / initial_equity * 100
         
-        col1.metric(t('exit_success', lang), f"{exit_prob:.1f}%", 
-                   delta=f"{exit_prob - 65:.1f}% {t('vs_base', lang)}" if exit_prob != 65 else None)
-        col2.metric(t('default_rate', lang), f"{default_prob:.1f}%",
-                   delta=f"{25 - default_prob:.1f}% {t('vs_base', lang)}" if default_prob != 25 else None,
-                   delta_color="inverse")
-        col3.metric(t('refi_failure', lang), f"{refi_fail_prob:.1f}%",
-                   delta=f"{10 - refi_fail_prob:.1f}% {t('vs_base', lang)}" if refi_fail_prob != 10 else None,
-                   delta_color="inverse")
-        col4.metric(t('median_irr', lang), f"{median_irr:.1%}")
-        col5.metric(t('var_95', lang), f"{var_95:.1f}% {t('of_equity', lang)}")
+        # Base case management buttons
+        col_base1, col_base2, col_base3 = st.columns([2, 1, 1])
+        with col_base2:
+            if st.button("📌 " + t('set_base', lang), help=t('set_base_help', lang), use_container_width=True):
+                st.session_state['base_case'] = {
+                    'exit_prob': exit_prob,
+                    'default_prob': default_prob,
+                    'refi_fail_prob': refi_fail_prob,
+                    'median_irr': median_irr,
+                    'var_95': var_95
+                }
+                # Use toast instead of success so the message survives the rerun!
+                st.toast(t('base_set', lang), icon="✅")
+                st.rerun()
+        
+        with col_base3:
+            if st.session_state['base_case'] and st.button("🔄 " + t('reset_base', lang), use_container_width=True):
+                st.session_state['base_case'] = None
+                st.rerun()
+        
+        # Display metrics with comparison
+        col1, col2, col3, col4, col5 = st.columns(5)
+        
+        if st.session_state['base_case']:
+            base = st.session_state['base_case']
+            
+            col1.metric(
+                t('exit_success', lang), 
+                f"{exit_prob:.1f}%", 
+                delta=f"{exit_prob - base['exit_prob']:.1f}%"
+            )
+            col2.metric(
+                t('default_rate', lang), 
+                f"{default_prob:.1f}%",
+                delta=f"{default_prob - base['default_prob']:.1f}%",
+                delta_color="inverse"
+            )
+            col3.metric(
+                t('refi_failure', lang), 
+                f"{refi_fail_prob:.1f}%",
+                delta=f"{refi_fail_prob - base['refi_fail_prob']:.1f}%",
+                delta_color="inverse"
+            )
+            col4.metric(
+                t('median_irr', lang), 
+                f"{median_irr:.1%}",
+                delta=f"{(median_irr - base['median_irr']):.1%}"
+            )
+            col5.metric(
+                t('var_95', lang), 
+                f"{var_95:.1f}%",
+                delta=f"{var_95 - base['var_95']:.1f}%",
+                delta_color="inverse"
+            )
+        else:
+            # No base case - show without delta
+            col1.metric(t('exit_success', lang), f"{exit_prob:.1f}%")
+            col2.metric(t('default_rate', lang), f"{default_prob:.1f}%")
+            col3.metric(t('refi_failure', lang), f"{refi_fail_prob:.1f}%")
+            col4.metric(t('median_irr', lang), f"{median_irr:.1%}")
+            col5.metric(t('var_95', lang), f"{var_95:.1f}%")
         
         st.markdown("---")
         
@@ -777,12 +850,12 @@ def main():
         col1, col2 = st.columns(2)
         
         with col1:
-            st.plotly_chart(create_outcome_chart(df, lang), width="stretch")
-            st.plotly_chart(create_survival_curve(df, iterations, lang), width="stretch")
+            st.plotly_chart(create_outcome_chart(df, lang), width='stretch')
+            st.plotly_chart(create_survival_curve(df, iterations, lang), width='stretch')
         
         with col2:
-            st.plotly_chart(create_irr_histogram(df, lang), width="stretch")
-            st.plotly_chart(create_exit_multiple_chart(df, lang), width="stretch")
+            st.plotly_chart(create_irr_histogram(df, lang), width='stretch')
+            st.plotly_chart(create_exit_multiple_chart(df, lang), width='stretch')
         
         st.markdown("---")
         
@@ -798,7 +871,6 @@ def main():
                 with col1:
                     st.markdown(f"**{t('irr_statistics', lang)}**")
                     
-                    # Calculate statistics
                     irr_data = {
                         t('metric', lang): [
                             t('sample_size', lang),
@@ -823,13 +895,12 @@ def main():
                             f"{exit_df['irr'].quantile(0.75) - exit_df['irr'].quantile(0.25):.2%}"
                         ]
                     }
-                    st.dataframe(pd.DataFrame(irr_data), width="stretch", hide_index=True)
+                    st.dataframe(pd.DataFrame(irr_data), width='stretch', hide_index=True)
                 
                 with col2:
                     if "exit_multiple" in exit_df.columns:
                         st.markdown(f"**{t('exit_multiple_stats', lang)}**")
                         
-                        # Calculate statistics
                         mult_data = {
                             t('metric', lang): [
                                 t('sample_size', lang),
@@ -854,7 +925,7 @@ def main():
                                 f"{exit_df['exit_multiple'].quantile(0.75) - exit_df['exit_multiple'].quantile(0.25):.2f}x"
                             ]
                         }
-                        st.dataframe(pd.DataFrame(mult_data), width="stretch", hide_index=True)
+                        st.dataframe(pd.DataFrame(mult_data), width='stretch', hide_index=True)
             else:
                 st.warning(t('no_exits', lang))
         
@@ -871,13 +942,12 @@ def main():
                         f"{np.percentile(loss, 99) / initial_equity * 100:.1f}%"
                     ]
                 }
-                st.dataframe(pd.DataFrame(var_data), width="stretch", hide_index=True)
+                st.dataframe(pd.DataFrame(var_data), width='stretch', hide_index=True)
             
             with col2:
                 st.markdown(f"**{t('additional_risk', lang)}**")
                 expected_loss = loss.mean() / initial_equity * 100
                 
-                # Sharpe Ratio
                 if len(exit_df) > 0 and exit_df["irr"].std() > 0:
                     sharpe = exit_df["irr"].mean() / exit_df["irr"].std()
                 else:
@@ -891,13 +961,12 @@ def main():
                         f"{exit_prob:.1f}%"
                     ]
                 }
-                st.dataframe(pd.DataFrame(risk_metrics), width="stretch", hide_index=True)
+                st.dataframe(pd.DataFrame(risk_metrics), width='stretch', hide_index=True)
         
         with tab3:
             st.markdown(f"**{t('simulation_results', lang)}**")
-            st.dataframe(df.head(100), width="stretch")
+            st.dataframe(df.head(100), width='stretch')
             
-            # Download button
             csv = df.to_csv(index=False)
             st.download_button(
                 label=t('download_csv', lang),
@@ -907,7 +976,6 @@ def main():
             )
     
     else:
-        # Show instructions when no simulation run
         st.info(t('adjust_params', lang))
         
         st.markdown(f"### {t('instructions_title', lang)}")
