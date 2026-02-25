@@ -9,7 +9,6 @@
 Monte Carlo simulation framework for quantifying liquidity risk in highly leveraged commercial real estate development projects. Analyzes default probability, refinancing viability, and equity IRR distributions through 30,000+ stochastic scenarios.
 
 > **🚀 [Try the Live Demo](https://pf-liquidity-risk.streamlit.app/)** - Interactive dashboard with real-time parameter adjustment
-> **Confidentiality Notice:** All financial figures normalized and location details anonymized. Methodology and conclusions remain representative of real project analysis.
 
 ---
 
@@ -52,15 +51,12 @@ streamlit run pf_liquidity_risk/app.py
 ## 📌 Executive Summary
 
 **Project Profile:**
-* Commercial parking tower development adjacent to new district court
-* 77% initial LTV, 3.4x leverage
-* **Critical 3-month window** between completion (Month 16) and refinancing (Month 19)
 
-**Key Finding:** ~90% probability of failure (default or refinancing failure) under base-case assumptions, driven by:
+- Commercial parking tower development adjacent to new district court
+- 77% initial LTV, 3.4x leverage
+- Anchor Tenant Secured: 1st floor fully leased to E-Mart Everyday (Fee-based: 4% of monthly revenue), providing a guaranteed baseline cash flow and driving traffic.
 
-1. Only 3 months post-completion to generate trailing NOI for refinancing
-2. High construction rates (10-18%) continuing during this critical window
-3. Insufficient revenue to cover debt service → rapid equity erosion
+**The Core Risk:** Despite securing a blue-chip anchor tenant, the project faces severe liquidity risk due to a critical 3-month window between completion (Month 16) and refinancing (Month 19). The compounding PF interest (~220M KRW/mo at 14%) drastically outpaces the initial NOI, leading to rapid equity erosion before the property can be fairly valued for refinancing.
 
 ---
 
@@ -74,7 +70,7 @@ Month 0 ──────── Month 16 ─── Month 19 ──── Month 
 Start          Completion    Refinancing  Court Opens        Exit
    |                |             |             |                 |
    └─Construction──┴─ 3mo Gap ───┴─Stabilization┴─ Full Ops ────┘
-   
+
 Interest:    10-18%        10-18%        5-9%          5-9%
 Revenue:       0%         Starting     Ramp-up      Stabilized
 Cap Ratio:    100%          40%          0%            0%
@@ -83,7 +79,7 @@ Cap Ratio:    100%          40%          0%            0%
 ### The Challenge
 
 | Phase | Timeline | Revenue | Interest | Risk |
-|:---|:---|:---|:---|:---|
+| :--- | :--- | :--- | :--- | :--- |
 | **Construction** | 0-16m | Zero | 10-18% (100% capitalized) | Construction delays |
 | **Critical Window** | 16-19m | Starting | 10-18% (40% capitalized) | **Highest equity burn** |
 | **Refinancing Gate** | Month 19 | - | Rate reset | Refinancing failure risk |
@@ -92,24 +88,23 @@ Cap Ratio:    100%          40%          0%            0%
 
 **Month 16-19 (Critical 3-Month Window):**
 
-* Building just completed - revenue starting from zero
-* Still paying construction-phase rates (10-18% p.a.)
-* Need 3-month trailing NOI for bank refinancing valuation
-* Revenue only 20-50% of full capacity → insufficient to cover debt service
-* **This is where most equity erosion occurs**
+- Building just completed - Baseline revenue begins strictly from the E-Mart anchor lease.
+- Still paying construction-phase rates (10-18% p.a.) on the massive 19B KRW debt.
+- While E-Mart provides downside protection, it only covers ~20-30% of the total capacity. The remaining vacant units generate zero trailing NOI.
+- **The structural flaw:** The E-Mart revenue alone is mathematically insufficient to cover the compounding debt service, leading to aggressive equity erosion before upper-floor leases stabilize**
 
 **Month 19 (Refinancing Gate):**
 
-* Property value = (3-month trailing NOI × 12) / 5.5% cap rate
-* Bank requirement: Current Debt ≤ Property Value × LTV (70-85%)
-* **Success:** Interest drops to 5-9%, debt service manageable → survival likely
-* **Failure:** Cannot refinance, rates stay at 10-18% → default likely within 3-6 months
+- Property value = (3-month trailing NOI × 12) / 5.5% cap rate
+- Bank requirement: Current Debt ≤ Property Value × LTV (70-85%)
+- **Success:** Interest drops to 5-9%, debt service manageable → survival likely
+- **Failure:** Cannot refinance, rates stay at 10-18% → default likely within 3-6 months
 
 **Month 24 (Court Opening):**
 
-* District court opens → primary demand driver activates
-* Revenue stabilizes at 80-100% capacity
-* No longer a critical gate (already refinanced at Month 19)
+- District court opens → primary demand driver activates
+- Revenue stabilizes at 80-100% capacity
+- No longer a critical gate (already refinanced at Month 19)
 
 ---
 
@@ -118,22 +113,22 @@ Cap Ratio:    100%          40%          0%            0%
 ### Outcome Probabilities (30,000 simulations)
 
 | Outcome | Probability | Description |
-|:---|:---:|:---|
+| :--- | :---: | :--- |
 | Successful Exit | 65% | Positive equity at Month 36 |
 | Default | 25% | Equity wipeout before refinancing (Month 16-19) |
 | Refinancing Failure | 10% | Debt exceeds LTV limit at Month 19 |
 
 ### Risk Metrics
 
-* **95% VaR:** 75% of initial equity
-* **Expected Loss:** 32% of equity base
-* **Median IRR (exits):** 8.5% annualized
-* **Survival Rate Bottleneck:** Month 16-19 (steepest decline due to 3-month window)
+- **95% VaR:** 75% of initial equity
+- **Expected Loss:** 32% of equity base
+- **Median IRR (exits):** 8.5% annualized
+- **Survival Rate Bottleneck:** Month 16-19 (steepest decline due to 3-month window)
 
 ### Why Projects Fail
 
 | Failure Mode | Probability | Timing | Root Cause |
-|:---|:---:|:---|:---|
+| :--- | :---: | :--- | :--- |
 | **Default** | 25% | Month 16-19 | High rates + insufficient revenue → equity wipeout |
 | **Refi Failure** | 10% | Month 19 | 3-month trailing NOI too low → can't meet LTV |
 | **Success** | 65% | Month 36 | Survived both critical gates |
@@ -142,26 +137,26 @@ Cap Ratio:    100%          40%          0%            0%
 
 ## 🔧 Interactive Dashboard Features
 
-* **Real-time parameter adjustment**
+- **Real-time parameter adjustment**
   - Capital structure (equity, debt, fixed costs)
   - Revenue distributions (stabilization & post-opening phases)
   - Interest rate scenarios (pre/post refinancing)
   - Project timeline (completion, refinancing, court opening, exit)
 
-* **Dynamic visualizations**
+- **Dynamic visualizations**
   - Outcome probability distribution
   - IRR histogram with percentiles
   - Month-by-month survival curve
   - Exit multiple analysis
 
-* **Scenario comparison**
+- **Scenario comparison**
   - Save baseline scenarios
   - Compare deltas across runs
   - Track changes in key metrics
 
-* **Bilingual interface** - English/Korean toggle
+- **Bilingual interface** - English/Korean toggle
 
-* **Export capabilities** - Download CSV results, save high-resolution charts
+- **Export capabilities** - Download CSV results, save high-resolution charts
 
 ---
 
@@ -180,10 +175,10 @@ graph LR
 
 ### Core Components
 
-* **Simulation Engine:** `PFInvestmentModel` - Monthly cash flow paths with stochastic variables
-* **Configuration:** `PFConfig` - Dataclass with triangular distributions for all parameters
-* **Visualization:** Plotly interactive charts + Matplotlib static reports
-* **Caching:** Streamlit @cache_data for instant re-runs with same parameters
+- **Simulation Engine:** `PFInvestmentModel` - Monthly cash flow paths with stochastic variables
+- **Configuration:** `PFConfig` - Dataclass with triangular distributions for all parameters
+- **Visualization:** Plotly interactive charts + Matplotlib static reports
+- **Caching:** Streamlit @cache_data for instant re-runs with same parameters
 
 ### Stochastic Variables (Triangular Distributions)
 
@@ -203,21 +198,21 @@ graph LR
 
 ### For Developers
 
-* **Pre-Investment Due Diligence:** Quantify probability of surviving the 3-month window
-* **Capital Structure Optimization:** Test different debt/equity mixes
-* **Contingency Planning:** Size equity reserves for construction delays + refinancing gap
+- **Pre-Investment Due Diligence:** Quantify probability of surviving the 3-month window
+- **Capital Structure Optimization:** Test different debt/equity mixes
+- **Contingency Planning:** Size equity reserves for construction delays + refinancing gap
 
 ### For Lenders
 
-* **Credit Risk Assessment:** Evaluate refinancing failure probability
-* **Covenant Structuring:** Set appropriate LTV thresholds for Month 19 gate
-* **Portfolio Risk Management:** Stress test exposure across multiple PF loans
+- **Credit Risk Assessment:** Evaluate refinancing failure probability
+- **Covenant Structuring:** Set appropriate LTV thresholds for Month 19 gate
+- **Portfolio Risk Management:** Stress test exposure across multiple PF loans
 
 ### For Investors
 
-* **Risk-Adjusted Return Analysis:** Compare IRR distributions across deals
-* **Liquidity Risk Quantification:** Understand 3-month window vulnerability
-* **Exit Strategy Planning:** Identify optimal hold periods given refinancing risk
+- **Risk-Adjusted Return Analysis:** Compare IRR distributions across deals
+- **Liquidity Risk Quantification:** Understand 3-month window vulnerability
+- **Exit Strategy Planning:** Identify optimal hold periods given refinancing risk
 
 ---
 
@@ -231,18 +226,15 @@ graph LR
 
 ### Critical Window (Month 16-19) - HIGHEST PRIORITY
 
-1. **Pre-leasing:** Secure anchor tenant commitments BEFORE completion
-2. **Aggressive lease-up:** Offer 2-3 months rent-free to accelerate occupancy
-3. **Bridge financing:** Arrange mezzanine debt specifically for this 3-month gap
-4. **Operating reserves:** Pre-fund 3 months of debt service shortfall
-5. **Early revenue optimization:** Price competitively to hit 50%+ occupancy by Month 17
+1. **Leverage Anchor LOC:** Use the signed E-Mart Letter of Commitment (LOC) to negotiate "Forward-looking NOI" valuations with lenders, bypassing the standard requirement for 3 months of historical trailing NOI.
+2. **Aggressive lease-up:** Offer 2-3 months rent-free on upper floors to accelerate occupancy, strictly aligning with E-Mart's grand opening traffic.
+3. **Operating reserves:** Pre-fund 3 months of debt service shortfall using the remaining equity buffer.
 
 ### Refinancing (Month 19)
 
-1. **Conservative LTV target:** Aim for 70% (not 80-85%) for stress approval
-2. **NOI documentation:** Ensure 3-month trailing average ≥ minimum threshold
-3. **Lender pre-commitment:** Negotiate refinancing terms 6 months in advance
-4. **Alternative lenders:** Line up backup refinancing sources
+1. **Forward-Valuation Push:** Refuse traditional trailing-average appraisals. Force lenders to value the asset based on "In-Place NOI" secured by the corporate anchor.
+2. **Conservative LTV target:** Aim for 70% (not 80-85%) to ensure approval even under stressed cap rate assumptions.
+3. **Alternative lenders:** Line up backup refinancing sources that specifically favor corporate-backed lease agreements.
 
 ### Post-Refinancing (Month 19-36)
 
@@ -265,18 +257,18 @@ graph LR
 
 ### Data Requirements
 
-* Accurate construction timeline estimates
-* Reliable market rent/occupancy data for 3-month ramp-up
-* Lender refinancing appetite (LTV assumptions)
-* District court construction schedule certainty
+- Accurate construction timeline estimates
+- Reliable market rent/occupancy data for 3-month ramp-up
+- Lender refinancing appetite (LTV assumptions)
+- District court construction schedule certainty
 
 ### Not Suitable For
 
-* ❌ Early-stage land banking projects
-* ❌ Multi-phase developments with complex waterfall structures
-* ❌ International projects with FX risk
-* ❌ Projects with significant regulatory uncertainty
-* ❌ Residential projects with different absorption patterns
+- ❌ Early-stage land banking projects
+- ❌ Multi-phase developments with complex waterfall structures
+- ❌ International projects with FX risk
+- ❌ Projects with significant regulatory uncertainty
+- ❌ Residential projects with different absorption patterns
 
 ---
 
@@ -304,22 +296,16 @@ graph LR
 A: Banks require trailing NOI to value the property, but construction lenders demand repayment soon after completion. 3 months is the minimum window to build operating history while maintaining construction loan terms.
 
 **Q: Why not refinance at Month 16 (immediately at completion)?**  
-A: Zero operating history at completion. Banks need at least 3 months of trailing NOI to underwrite refinancing. Earlier than Month 19 is typically not feasible.
+A: Standard banking policies require at least 3 months of trailing NOI (historical operating data) to underwrite refinancing, effectively blocking Month 16 execution for empty buildings. However, securing a corporate anchor like E-Mart is the "cheat code" to challenge this rule, allowing developers to push for early refinancing based on contracted future cash flows.
 
 **Q: What if the 3-month NOI is weak but improving?**  
-A: Most banks use trailing 3-month average. A weak start (Month 16-17) can sink the average even if Month 18-19 is strong. This is why pre-leasing is critical.
+A: Most banks mechanically use a trailing 3-month average. The zero-revenue period during initial tenant fit-outs (rent-free periods) heavily drags down this average, causing valuation shortfalls. This underscores why relying solely on historical NOI is fatal for highly leveraged projects.
 
 **Q: Can you delay refinancing beyond Month 19?**  
-A: Construction loans typically have strict maturity dates (often 18-24 months post-completion). Extending requires underwriting equivalent to refinancing, so no advantage to delaying if you can refinance successfully.
+A: Yes, but at a massive financial cost. If the property valuation is too low to successfully refinance at Month 19, developers typically have no choice but to negotiate a maturity extension with the existing PF lenders. Lenders often agree to avoid an immediate default (EOD), but the developer must continue paying the exorbitant construction-phase interest rates (10-18% p.a.). This is a desperate survival tactic, not a strategy, as it rapidly bleeds any remaining equity or operational revenue until the building achieves a higher valuation.
 
 **Q: What's the relationship between court opening (Month 24) and refinancing (Month 19)?**  
 A: Court opening is the primary demand driver but occurs 5 months AFTER refinancing. Banks at Month 19 are betting on future demand. If court construction is delayed, refinancing becomes much harder.
-
-**Q: Simulation runtime?**  
-A: 2-5 seconds for 30,000 iterations on modern hardware. Dashboard is cached for instant re-runs with identical parameters.
-
-**Q: Can this be adapted for residential projects?**  
-A: Yes, but adjust the revenue ramp-up curve (residential absorption is typically 6-12 months, not 3 months) and interest capitalization ratios.
 
 ---
 
@@ -327,11 +313,11 @@ A: Yes, but adjust the revenue ramp-up curve (residential absorption is typicall
 
 Contributions welcome! Priority areas:
 
-* Correlation structures between interest rates and revenue
-* Sensitivity analysis visualizations (tornado diagrams)
-* Mezzanine debt waterfall logic
-* Jupyter notebook tutorials
-* Additional output formats (Excel reports)
+- Correlation structures between interest rates and revenue
+- Sensitivity analysis visualizations (tornado diagrams)
+- Mezzanine debt waterfall logic
+- Jupyter notebook tutorials
+- Additional output formats (Excel reports)
 
 ---
 
@@ -363,5 +349,5 @@ MIT License - See [LICENSE](LICENSE) file for details
 
 ---
 
-**Built with:** Python • NumPy • Pandas • Streamlit • Plotly  
+**Built with:** Python • NumPy • Pandas • Streamlit • Plotly
 **Methodology:** Monte Carlo Simulation • Stochastic Modeling • Project Finance Risk Management
