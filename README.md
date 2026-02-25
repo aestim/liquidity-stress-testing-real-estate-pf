@@ -3,19 +3,34 @@
 ## Stochastic Cash Flow Modeling & Monte Carlo Risk Analysis
 
 [![CCDS Project template](https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter)](https://cookiecutter-data-science.drivendata.org/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://pf-liquidity-risk.streamlit.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Monte Carlo simulation framework for quantifying liquidity risk in highly leveraged commercial real estate development projects. Analyzes default probability, refinancing viability, and equity IRR distributions through 30,000+ stochastic scenarios.
 
+> **🚀 [Try the Live Demo](https://pf-liquidity-risk.streamlit.app/)** - Interactive dashboard with real-time parameter adjustment
 > **Confidentiality Notice:** All financial figures normalized and location details anonymized. Methodology and conclusions remain representative of real project analysis.
 
 ---
 
 ## 🚀 Quick Start
 
-### Installation
+### Option 1: Live Demo (Fastest)
+
+**👉 [Launch Dashboard](https://pf-liquidity-risk.streamlit.app/)**
+
+Run simulations instantly in your browser with:
+
+- Real-time parameter adjustment
+- Interactive visualizations
+- Bilingual interface (EN/KO)
+- Scenario comparison
+- CSV export
+
+### Option 2: Local Installation
 
 ```bash
-git clone https://github.com/yourusername/pf-liquidity-risk.git
+git clone https://github.com/aestim/real-estate-pf-liquidity-risk.git
 cd pf-liquidity-risk
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
@@ -37,12 +52,11 @@ streamlit run pf_liquidity_risk/app.py
 ## 📌 Executive Summary
 
 **Project Profile:**
-
 * Commercial parking tower development adjacent to new district court
 * 77% initial LTV, 3.4x leverage
 * **Critical 3-month window** between completion (Month 16) and refinancing (Month 19)
 
-**Key Finding:** ~35% probability of failure (default or refinancing failure) under base-case assumptions, driven by:
+**Key Finding:** ~90% probability of failure (default or refinancing failure) under base-case assumptions, driven by:
 
 1. Only 3 months post-completion to generate trailing NOI for refinancing
 2. High construction rates (10-18%) continuing during this critical window
@@ -54,7 +68,7 @@ streamlit run pf_liquidity_risk/app.py
 
 ### Project Timeline
 
-```
+``` mermaid
 Month 0 ──────── Month 16 ─── Month 19 ──── Month 24 ──────── Month 36
    |                |             |             |                 |
 Start          Completion    Refinancing  Court Opens        Exit
@@ -69,7 +83,6 @@ Cap Ratio:    100%          40%          0%            0%
 ### The Challenge
 
 | Phase | Timeline | Revenue | Interest | Risk |
-
 |:---|:---|:---|:---|:---|
 | **Construction** | 0-16m | Zero | 10-18% (100% capitalized) | Construction delays |
 | **Critical Window** | 16-19m | Starting | 10-18% (40% capitalized) | **Highest equity burn** |
@@ -105,7 +118,6 @@ Cap Ratio:    100%          40%          0%            0%
 ### Outcome Probabilities (30,000 simulations)
 
 | Outcome | Probability | Description |
-
 |:---|:---:|:---|
 | Successful Exit | 65% | Positive equity at Month 36 |
 | Default | 25% | Equity wipeout before refinancing (Month 16-19) |
@@ -121,7 +133,6 @@ Cap Ratio:    100%          40%          0%            0%
 ### Why Projects Fail
 
 | Failure Mode | Probability | Timing | Root Cause |
-
 |:---|:---:|:---|:---|
 | **Default** | 25% | Month 16-19 | High rates + insufficient revenue → equity wipeout |
 | **Refi Failure** | 10% | Month 19 | 3-month trailing NOI too low → can't meet LTV |
