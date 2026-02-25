@@ -50,13 +50,15 @@ streamlit run pf_liquidity_risk/app.py
 
 ## 📌 Executive Summary
 
-**Project Profile:**
+| Item | Details |
+| :--- | :--- |
+| **Project** | Commercial parking tower (adjacent to District Court) |
+| **Leverage** | **77.2% LTV** (3.39x Leverage) |
+| **Anchor** | **E-Mart Everyday** (1st floor, fee-based lease) |
+| **Core Risk** | **Refinancing Gap:** Critical liquidity burn between Month 16-19 |
 
-- Commercial parking tower development adjacent to new district court
-- 77% initial LTV, 3.4x leverage
-- Anchor Tenant Secured: 1st floor fully leased to E-Mart Everyday (Fee-based: 4% of monthly revenue), providing a guaranteed baseline cash flow and driving traffic.
-
-**The Core Risk:** Despite securing a blue-chip anchor tenant, the project faces severe liquidity risk due to a critical 3-month window between completion (Month 16) and refinancing (Month 19). The compounding PF interest (~220M KRW/mo at 14%) drastically outpaces the initial NOI, leading to rapid equity erosion before the property can be fairly valued for refinancing.
+> [!CAUTION]
+> **The 3-Month Death Valley:** PF interest (~220M KRW/mo) at 14% far exceeds early-stage NOI, leading to rapid equity erosion before the Month 19 refinancing gate.
 
 ---
 
@@ -288,22 +290,49 @@ flowchart LR
 
 ---
 
-## ❓ FAQ
+## ❓ FAQ & Strategic Insights
 
-**Q: Why only 3 months between completion and refinancing?**  
-A: Banks require trailing NOI to value the property, but construction lenders demand repayment soon after completion. 3 months is the minimum window to build operating history while maintaining construction loan terms.
+This section details the financial assumptions behind the **3-month "Death Valley"** and the **Month 19 Refinancing Gate**.
 
-**Q: Why not refinance at Month 16 (immediately at completion)?**  
-A: Standard banking policies require at least 3 months of trailing NOI (historical operating data) to underwrite refinancing, effectively blocking Month 16 execution for empty buildings. However, securing a corporate anchor like E-Mart is the "cheat code" to challenge this rule, allowing developers to push for early refinancing based on contracted future cash flows.
+<details>
+<summary><b>Q: Why is there a 3-month gap between completion and refinancing?</b></summary>
 
-**Q: What if the 3-month NOI is weak but improving?**  
-A: Most banks mechanically use a trailing 3-month average. The zero-revenue period during initial tenant fit-outs (rent-free periods) heavily drags down this average, causing valuation shortfalls. This underscores why relying solely on historical NOI is fatal for highly leveraged projects.
+* **Bank Underwriting:** Refinancing lenders (Facility Loans) require a **"Trailing NOI"** (Net Operating Income) to verify the asset's cash-flow stability before committing capital.
+* **Operational Runway:** It takes a minimum of 3 months to complete tenant fit-outs, clear rent-free periods, and document actual rent deposits in bank statements.
+* **💡 Strategic Insight:** This 3-month window is the project's most vulnerable phase, where high construction interest (10-18% p.a.) aggressively erodes equity before stabilization.
+</details>
 
-**Q: Can you delay refinancing beyond Month 19?**  
-A: Yes, but at a massive financial cost. If the property valuation is too low to successfully refinance at Month 19, developers typically have no choice but to negotiate a maturity extension with the existing PF lenders. Lenders often agree to avoid an immediate default (EOD), but the developer must continue paying the exorbitant construction-phase interest rates (10-18% p.a.). This is a desperate survival tactic, not a strategy, as it rapidly bleeds any remaining equity or operational revenue until the building achieves a higher valuation.
+<details>
+<summary><b>Q: Why can't we refinance at Month 16 (Day 1 of Completion)?</b></summary>
 
-**Q: What's the relationship between court opening (Month 24) and refinancing (Month 19)?**  
-A: Court opening is the primary demand driver but occurs 5 months AFTER refinancing. Banks at Month 19 are betting on future demand. If court construction is delayed, refinancing becomes much harder.
+* **Vacancy Risk:** Without operating history, banks view the building as an "empty shell," significantly slashing the LTV (Loan-to-Value) ratio based on liquidation value rather than income value.
+* **The "E-Mart" Cheat Code:** By securing **E-Mart Everyday** as a blue-chip anchor tenant, we can negotiate with lenders to recognize **"Forward-looking NOI"** based on signed lease agreements, potentially shortening this window.
+* **💡 Strategy:** The model tests whether this "Anchor-Tenant Strategy" provides enough leverage to bypass traditional 3-month trailing requirements.
+</details>
+
+<details>
+<summary><b>Q: What if the 3-month NOI is weak but improving?</b></summary>
+
+* **The "Average Trap":** Lenders typically use a **simple 3-month trailing average**. 
+* **Valuation Impact:** Zero-revenue months (due to rent-free periods or fit-outs) at the start of the window can "drag down" the entire valuation, causing an **LTV breach** even if Month 19's performance is strong.
+* **💡 Risk Management:** This underscores why relying solely on historical NOI is fatal for highly leveraged PF projects.
+</details>
+
+<details>
+<summary><b>Q: What happens if refinancing is delayed beyond Month 19?</b></summary>
+
+* **Maturity Extension:** While lenders may grant an extension to avoid immediate default (EOD), the cost is catastrophic.
+* **Financial Bleeding:** The project remains stuck with **10-18% p.a. construction rates**.
+* **💡 Warning:** This is a survival tactic, not a strategy. At this stage, approximately **0.22B KRW** in cash is "evaporated" monthly into interest payments, rapidly zeroing out the developer's equity.
+</details>
+
+<details>
+<summary><b>Q: How does the District Court opening (Month 24) affect the Month 19 gate?</b></summary>
+
+* **Timing Mismatch:** The District Court is the primary demand driver for high-rent legal offices, but it opens **5 months AFTER** the critical refinancing window.
+* **Lenders' Bet:** Refinancing banks at Month 19 are essentially "betting" on the court's timely completion.
+* **💡 Critical Path:** If the court construction is delayed, the probability of refinancing failure spikes, as upper-floor stabilization becomes speculative rather than certain.
+</details>
 
 ---
 
@@ -348,4 +377,5 @@ MIT License - See [LICENSE](LICENSE) file for details
 ---
 
 **Built with:** Python • NumPy • Pandas • Streamlit • Plotly
+
 **Methodology:** Monte Carlo Simulation • Stochastic Modeling • Project Finance Risk Management
